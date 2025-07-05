@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 import com.music.app.backend.entity.MyUser;
 import com.music.app.backend.repository.MyUserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class MyUserDetailService implements UserDetailsService {
 
     private final MyUserRepository myUserRepository;
+
 
     // Constructor injection for MyUserRepository
     public MyUserDetailService(MyUserRepository myUserRepository) {
@@ -31,12 +35,13 @@ public class MyUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<MyUser> myUserOptional = myUserRepository.findByUsername(username);
+        log.debug("myUserOptional = "+myUserOptional);
         if (myUserOptional.isPresent()) {
             MyUser myUser = myUserOptional.get();
             return User.builder()
                     .username(myUser.getUsername())
                     .password(myUser.getPassword())
-                    .roles(myUser.getRoles().split(","))
+                    .roles( "USER")
                     .build();
         } else {
             throw new UsernameNotFoundException(username);

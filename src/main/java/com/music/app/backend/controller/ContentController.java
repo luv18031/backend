@@ -36,6 +36,12 @@ public class ContentController {
         return "login";
     }
 
+    @GetMapping("/api/auth/register")
+    public String register() {
+        return "registration";
+    }
+
+
     /**
      * Maps the admin home page.
      * 

@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.music.app.backend.service.MyUserDetailService;
 
+
 @Configuration
 public class SecurityConfiguration {
 
@@ -34,6 +35,7 @@ public class SecurityConfiguration {
                         authorize -> {
                             // Permit access to static resources and login, home, and error pages
                             authorize.requestMatchers("/css/**", "/js/**", "/images/**").permitAll();
+                            authorize.requestMatchers("/api/auth/*").permitAll();
                             authorize.requestMatchers("/login", "/error/**", "/logout", "/", "/home").permitAll();
                             // Restrict access to admin and user pages based on roles
                             authorize.requestMatchers("/admin/**").hasRole("ADMIN");
@@ -49,6 +51,12 @@ public class SecurityConfiguration {
                         .logoutSuccessUrl("/login?logout")  // Redirect to login page after logout
                         .permitAll()
                 )
+                // .sessionManagement(session -> 
+                // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // .oauth2ResourceServer(server -> server
+                //         .jwt(Customizer.withDefaults())
+                // )
+
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for simplicity (not recommended for production)
                 .build();
     }

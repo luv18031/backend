@@ -11,4 +11,7 @@ import com.music.app.backend.entity.MyUser;
 public interface MyUserRepository extends JpaRepository<MyUser, Long> {
 
     Optional<MyUser> findByUsername(String username);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+
 }
