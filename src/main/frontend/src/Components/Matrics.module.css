@@ -1,0 +1,14 @@
+.main-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.container{
+    text-align: center;
+    padding: 2rem;
+}
+
+.number{
+    font-size: 3rem;
+    font-weight: 700;
+}

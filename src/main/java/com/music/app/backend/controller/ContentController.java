@@ -13,7 +13,7 @@ public class ContentController {
      */
     @GetMapping("/")
     public String home() {
-        return "home";
+        return "index";
     }
 
     /**
@@ -33,7 +33,7 @@ public class ContentController {
      */
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "index";
     }
 
     @GetMapping("/api/auth/register")

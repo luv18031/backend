@@ -1,0 +1,58 @@
+.music-distribution-container{
+    margin: auto;
+    font-family: "Roboto Slab", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    position: absolute;
+    left: 5rem;
+    top: 3rem;
+    color: white;
+
+}
+
+.heading{
+    font-size: 5rem;
+    font-weight: 800;
+    margin-top: 5rem;
+
+}
+.heading{
+    width: fit-content;
+}
+.heading span{
+    line-height: 20px;
+}
+.heading span:nth-child(3){
+    display: block;
+}
+.heading span:nth-child(2){
+    color: rgb(46, 218, 46);
+}
+.sub-heading{
+    font-size: 2.5rem;
+    margin-top: 2rem;
+}
+
+.paragraph{
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+.terms{
+    font-size: 0.6rem;
+}
+
+.join-button{
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    border: 2px solid green;
+    width: fit-content;
+    padding: 10px;
+}
+
+.video{
+    width: 100%;
+    position: relative;
+    z-index: -1;
+    filter: contrast(1) brightness(0.55);
+}
