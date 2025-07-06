@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.music.app.backend.dto.UserProfileDto;
 import com.music.app.backend.mapper.UserMapper;
 import com.music.app.backend.service.UserService;
+import org.springframework.security.core.Authentication;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,7 @@ public class UserProfileController {
 
     @GetMapping("/me")
     public ResponseEntity<UserProfileDto> getUserProfile(
-      final org.springframework.security.core.Authentication authentication) {
+      final Authentication authentication) {
   
         final var user = 
           userService.getUserByUsername(authentication.getName());
