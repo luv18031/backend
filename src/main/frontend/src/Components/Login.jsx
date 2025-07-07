@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
 
 function Login() {
 
@@ -9,6 +11,17 @@ function Login() {
     // email: "",
     username: ""
   }
+
+  const [csrfToken, setCsrfToken] = useState('');
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      const response = await axios.get('http://localhost:8080/csrf-token');
+      setCsrfToken(response.data.csrfToken);
+    };
+    fetchCsrfToken();
+  }, []);
+
 
   const [eachEntry, setEachEntry] = useState(initialState)
   // const {name, email, username} = eachEntry
@@ -20,10 +33,14 @@ function Login() {
   const handleSubmit = e => {
     e.preventDefault();
     console.log("hello")
+
+    // const token = axios.get('http://localhost:8080/csrf-token').data.token;
+
     fetch('http://localhost:8080/login', {
       method: "POST",
       body: JSON.stringify(eachEntry),
       headers: {
+        'X-CSRF-TOKEN': csrfToken,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
