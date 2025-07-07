@@ -1,6 +1,7 @@
 package com.music.app.backend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.music.app.backend.dto.UserProfileDto;
 import com.music.app.backend.mapper.UserMapper;
 import com.music.app.backend.service.UserService;
-import org.springframework.security.core.Authentication;
 
 import lombok.RequiredArgsConstructor;
 
