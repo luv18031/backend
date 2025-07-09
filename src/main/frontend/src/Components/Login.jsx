@@ -14,10 +14,31 @@ function Login() {
 
   const [csrfToken, setCsrfToken] = useState('');
 
+  // useEffect(() => {
+  //   const token = document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+  //   setCsrfToken(token);
+  //   console.log(token)
+  // }, []);
+
   useEffect(() => {
     const fetchCsrfToken = async () => {
-      const response = await axios.get('http://localhost:8080/csrf-token');
+      console.log("before getting token")
+      const response = await axios.get('http://localhost:8080/csrf-token')
+      .catch(error => {
+        if (error.response) {
+          // The server responded with a status code outside the 2xx range
+          console.log('Error response:', error.response);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log('Error request:', error.request);
+        } else {
+          // Something happened in setting up the request that triggered an error
+          console.log('Error message:', error.message);
+        }
+      });
+      console.log("after getting token")
       setCsrfToken(response.data.csrfToken);
+      console.log(response)
     };
     fetchCsrfToken();
   }, []);
@@ -30,7 +51,7 @@ function Login() {
       setEachEntry({...eachEntry, [e.target.name]: e.target.value})
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("hello")
 
@@ -44,7 +65,8 @@ function Login() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-    }).then(
+    })
+    .then(
       (response) => (response.json())
     ).then((response) => {
       if(response.status === 'success'){

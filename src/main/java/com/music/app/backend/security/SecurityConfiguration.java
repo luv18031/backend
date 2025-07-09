@@ -1,14 +1,16 @@
 package com.music.app.backend.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import com.music.app.backend.config.CustomCorsConfiguration;
 import com.music.app.backend.service.MyUserDetailService;
 
 
@@ -16,7 +18,7 @@ import com.music.app.backend.service.MyUserDetailService;
 public class SecurityConfiguration {
 
     private final MyUserDetailService myUserDetailService;
-
+    @Autowired CustomCorsConfiguration customCorsConfiguration;
     // Constructor injection for MyUserDetailService
     public SecurityConfiguration(MyUserDetailService myUserDetailService) {
         this.myUserDetailService = myUserDetailService;
@@ -31,6 +33,9 @@ public class SecurityConfiguration {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        
+         
+
         return httpSecurity.authorizeHttpRequests(
                         authorize -> {
                             // Permit access to static resources and login, home, and error pages
@@ -57,7 +62,12 @@ public class SecurityConfiguration {
                 //         .jwt(Customizer.withDefaults())
                 // )
 
-                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for simplicity (not recommended for production)
+                // .csrf(csrf -> csrf
+                //     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                //     .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()) // For header-based token handling
+                // )
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                 .cors(c -> c.configurationSource(customCorsConfiguration))
                 .build();
     }
 

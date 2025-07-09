@@ -1,6 +1,7 @@
 package com.music.app.backend.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class RegistrationController {
     private final UserRegistrationService userRegistrationService;
 
     private final UserRegistrationMapper userRegistrationMapper;
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponseDto> registerUser(
       @Valid @ModelAttribute final RegistrationRequestDto registrationDTO) {

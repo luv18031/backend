@@ -19,6 +19,7 @@ public class CustomErrorController implements ErrorController {
      * @param httpServletRequest the HttpServletRequest object
      * @return the view name for the error page
      */
+    
     @GetMapping("/error")
     public String handleError(HttpServletRequest httpServletRequest) {
         Object statusCode = httpServletRequest.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
