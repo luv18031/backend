@@ -2,7 +2,6 @@ package com.music.love.app.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDTO> getUserById(UUID id){
+    public Optional<UserDTO> getUserById(Long id){
         return userRepository.findById(id).map(this::convertToDTO);
     }
 
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UUID id,UserDTO userDTO){
+    public UserDTO updateUser(Long id,UserDTO userDTO){
         MyUser user = userRepository.findById(id).orElseThrow();
         user.setUsername(userDTO.username());
         user.setEmail(userDTO.email());
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UUID id){
+    public void deleteUser(Long id){
         userRepository.deleteById(id);
     }
 

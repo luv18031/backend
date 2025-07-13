@@ -2,37 +2,49 @@ package com.music.love.app.service;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.music.love.app.dto.AuthenticationRequestDto;
-import com.music.love.app.dto.AuthenticationResponseDto;
-
-import lombok.RequiredArgsConstructor;
+import com.music.love.app.dto.RegistrationRequestDto;
+import com.music.love.app.entity.MyUser;
+import com.music.love.app.repository.UserRepository;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
+    private final UserRepository userRepository;
+    
+    private final PasswordEncoder passwordEncoder;
     
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
 
-    public AuthenticationResponseDto authenticate(
-        final AuthenticationRequestDto request
+    public AuthenticationService(
+        UserRepository userRepository,
+        AuthenticationManager authenticationManager,
+        PasswordEncoder passwordEncoder
     ) {
-        try {
-            final var authToken = UsernamePasswordAuthenticationToken
-                .unauthenticated(request.username(), request.password());
-    
-            authenticationManager.authenticate(authToken);
-            final var token = jwtService.generateToken(request.username());
-            return new AuthenticationResponseDto(token);
-            
-        } catch (Exception e) {
-            throw e;
-        }
-
-
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    public MyUser signup(RegistrationRequestDto input) {
+        MyUser user = new MyUser();
+                user.setUsername(input.username());
+                user.setEmail(input.email());
+                user.setPassword(passwordEncoder.encode(input.password()));
 
+        return userRepository.save(user);
+    }
+
+    public MyUser authenticate(AuthenticationRequestDto input) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        input.username(),
+                        input.password()
+                )
+        );
+
+        return userRepository.findByUsername(input.username()).orElseThrow();
+    }
 }

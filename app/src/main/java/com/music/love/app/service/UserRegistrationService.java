@@ -1,5 +1,7 @@
 package com.music.love.app.service;
 
+import java.time.Instant;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,9 @@ public class UserRegistrationService {
         user.setEmail(request.getEmail());
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        return user;
+        user.setCreatedAt(Instant.now());
+        user.setUpdatedAt(Instant.now());
+        return userRepository.save(user);
     }
 
 }

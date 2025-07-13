@@ -13,7 +13,7 @@ public class UserRegistrationMapper {
         final var user = new MyUser();
         
         user.setEmail(registrationRequestDto.email());
-        user.setUsername(registrationRequestDto.email());
+        user.setUsername(registrationRequestDto.username());
         user.setPassword(registrationRequestDto.password());
 
         return user;
@@ -21,6 +21,6 @@ public class UserRegistrationMapper {
 
     public RegistrationResponseDto toRegistrationResponseDto(final MyUser user){
 
-        return new RegistrationResponseDto(user.getEmail(), user.getUsername());
+        return new RegistrationResponseDto(user.getUsername(), user.getEmail());
     }
 }

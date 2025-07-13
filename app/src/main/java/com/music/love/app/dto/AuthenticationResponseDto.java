@@ -1,4 +1,14 @@
 package com.music.love.app.dto;
 
-public record AuthenticationResponseDto(String token) {
-} 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class AuthenticationResponseDto {
+
+    private String token;
+
+    private long expiresIn;
+
+}
