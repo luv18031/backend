@@ -1,5 +1,7 @@
 package com.music.love.app.dto;
 
-public record UserDTO(Long id,String username, String email,String password) {
+import java.util.UUID;
+
+public record UserDTO(UUID id,String username, String email,String password) {
     
 }
