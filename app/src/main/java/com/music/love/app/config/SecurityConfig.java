@@ -36,6 +36,7 @@ public class SecurityConfig {
     ) throws Exception {
         return http
         .csrf(AbstractHttpConfigurer::disable)
+        .cors(cors -> cors.disable())
         .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
         .anyRequest().authenticated())
         .sessionManagement(session ->

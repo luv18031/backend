@@ -1,6 +1,9 @@
 package com.music.love.app.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +27,18 @@ public class AuthController {
 
     private final AuthenticationService authenticationService;
 
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> authenticate(
         @RequestBody final AuthenticationRequestDto authenticationRequestDto
     ) {
         MyUser authenticatedUser = authenticationService.authenticate(authenticationRequestDto);
         
+        if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         AuthenticationResponseDto authResonse = new AuthenticationResponseDto();

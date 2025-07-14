@@ -9,7 +9,6 @@ import com.music.love.app.entity.MyUser;
 import com.music.love.app.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,10 +20,6 @@ public class UserRegistrationService {
 
     @Transactional
     public MyUser registerUser(MyUser request){
-        if(userRepository.existsByUsername(request.getUsername()) ||
-         userRepository.existsByEmail(request.getEmail())) {
-            throw new ValidationException("Username or Email already exists");
-        }
 
         MyUser user = new MyUser();
 
