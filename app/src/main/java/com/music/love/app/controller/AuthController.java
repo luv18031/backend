@@ -34,17 +34,16 @@ public class AuthController {
         @RequestBody final AuthenticationRequestDto authenticationRequestDto
     ) {
         MyUser authenticatedUser = authenticationService.authenticate(authenticationRequestDto);
-        
-        if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()==false){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        AuthenticationResponseDto authResonse = new AuthenticationResponseDto();
-        authResonse.setToken(jwtToken);
-        authResonse.setExpiresIn(jwtService.getExpirationTime());
 
-        return ResponseEntity.ok(authResonse);
+        AuthenticationResponseDto authResponse = new AuthenticationResponseDto();
+        authResponse.setToken(jwtToken);
+        authResponse.setExpiresIn(jwtService.getExpirationTime());
+
+        return ResponseEntity.ok(authResponse);
     }
 }
