@@ -34,6 +34,7 @@ public class AuthController {
         @RequestBody final AuthenticationRequestDto authenticationRequestDto
     ) {
         MyUser authenticatedUser = authenticationService.authenticate(authenticationRequestDto);
+        System.out.println(SecurityContextHolder.getContext());
         if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()==false){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }

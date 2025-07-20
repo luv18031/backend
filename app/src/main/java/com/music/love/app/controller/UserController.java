@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +33,6 @@ public class UserController {
 
     @GetMapping("/")
     public List<UserDTO> getAllUsers() {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        
         return userService.getAllUsers();
     }
 
