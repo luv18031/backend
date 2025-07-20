@@ -35,12 +35,12 @@ public class RegistrationController {
         
         if(userRepository.existsByUsername(registrationRequestDto.username()) ||
          userRepository.existsByEmail(registrationRequestDto.email())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
 
         final var registeredUser = userRegistrationService.registerUser(userRegistrationMapper.toEntity(registrationRequestDto));
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
             userRegistrationMapper.toRegistrationResponseDto(registeredUser)
         );
     }
