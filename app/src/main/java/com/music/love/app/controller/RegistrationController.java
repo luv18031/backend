@@ -40,7 +40,7 @@ public class RegistrationController {
 
         final var registeredUser = userRegistrationService.registerUser(userRegistrationMapper.toEntity(registrationRequestDto));
 
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
             userRegistrationMapper.toRegistrationResponseDto(registeredUser)
         );
     }

@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AuthController {
     
@@ -28,7 +29,7 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> authenticate(
         @RequestBody final AuthenticationRequestDto authenticationRequestDto
