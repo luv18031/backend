@@ -14,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -40,6 +41,36 @@ public class MyUser implements UserDetails {
     @Column(name = "updated_at")
     @LastModifiedDate
     private Instant updatedAt;
+
+    @Column
+    private String register_as;
+
+    @Column
+    private String phoneNumber;
+
+    @Column
+    private String country;
+
+    @Column
+    private String city;
+
+    @Column 
+    private String address;
+
+    @Column
+    private String state;
+
+    @Column
+    private String pinCode;
+
+    @Lob
+    @Column
+    private byte[] profilePicture;
+
+    @Lob
+    @Column
+    private byte[] governmentPictureId;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

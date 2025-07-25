@@ -1,5 +1,6 @@
 package com.music.love.app.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,8 +58,16 @@ public class UserServiceImpl implements UserService {
         MyUser user = userRepository.findById(id).orElseThrow();
         user.setUsername(userDTO.username());
         user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
-
+        user.setAddress(userDTO.address());
+        user.setCity(userDTO.city());
+        user.setState(userDTO.state());
+        user.setCountry(userDTO.country());
+        user.setPinCode(userDTO.pinCode());
+        user.setPhoneNumber(userDTO.phoneNumber());
+        user.setRegister_as(userDTO.register_as());
+        user.setProfilePicture(userDTO.profilePicture());
+        user.setGovernmentPictureId(userDTO.governmentPictureId());
+        user.setUpdatedAt(Instant.now());
         MyUser updatedUser = userRepository.save(user);
 
         return convertToDTO(updatedUser);
@@ -70,14 +79,26 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDTO convertToDTO(MyUser user){
-        return new UserDTO(user.getId(),user.getUsername(),user.getEmail(),user.getPassword());
+        return new UserDTO(user.getId(),user.getUsername(),user.getEmail(), 
+            user.getRegister_as(), user.getPhoneNumber(), user.getCountry(), 
+            user.getCity(), user.getAddress(), user.getState(), user.getPinCode(),
+            user.getProfilePicture(), user.getGovernmentPictureId());
     }
 
     private MyUser convertToEntity(UserDTO userDTO){
         MyUser user = new MyUser();
+        user.setId(userDTO.id());
         user.setEmail(userDTO.email());
-        user.setPassword(userDTO.password());
         user.setUsername(userDTO.username());
+        user.setAddress(userDTO.address());
+        user.setCity(userDTO.city());
+        user.setState(userDTO.state());
+        user.setCountry(userDTO.country());
+        user.setPinCode(userDTO.pinCode());
+        user.setPhoneNumber(userDTO.phoneNumber());
+        user.setRegister_as(userDTO.register_as());
+        user.setProfilePicture(userDTO.profilePicture());
+        user.setGovernmentPictureId(userDTO.governmentPictureId());
 
         return user;
     }

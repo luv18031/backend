@@ -7,14 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.music.love.app.dto.UserDTO;
 import com.music.love.app.dto.UserProfileRequestDto;
-import com.music.love.app.dto.UserResponseDTO;
 import com.music.love.app.service.UserService;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -37,7 +38,7 @@ public class UserProfileController {
     }
     
     @GetMapping
-    public ResponseEntity<UserResponseDTO> getUserProfile(@RequestBody final UserProfileRequestDto userProfileRequestDto) {
+    public ResponseEntity<UserDTO> getUserProfile(@RequestBody final UserProfileRequestDto userProfileRequestDto) {
         // Placeholder for user profile retrieval logic
         if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -47,9 +48,24 @@ public class UserProfileController {
             return ResponseEntity.notFound().build();
         }
         UserDTO user = userResp.get();
-        return ResponseEntity.ok(
-            new UserResponseDTO(user.id(), user.username(), user.email())
-        );
-        
+        return ResponseEntity.ok(user);
     }
+
+    @PatchMapping
+    public ResponseEntity<UserDTO> saveUserProfile(@RequestBody final UserDTO userProfileRequestDto) {
+        
+        if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        Optional<UserDTO> userResp = userService.findByUsername(userProfileRequestDto.username());
+        if(userResp == null) {
+            return ResponseEntity.notFound().build();
+        }
+        UserDTO user = userResp.get();
+
+        userService.saveUser(user);
+        
+        return ResponseEntity.ok(user);
+    }
+    
 }
