@@ -12,6 +12,8 @@ public interface UserService {
     UserDTO saveUser(UserDTO userDTO);
     UserDTO updateUser(Long id, UserDTO userDTO);
     void deleteUser(Long id);
-    
+    Optional<UserDTO> findByUsername(String username);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
     
 } 

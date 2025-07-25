@@ -40,7 +40,6 @@ public class UserController {
 
         // headers.add("Access-Control-Allow-Origin", "http://localhost:3000");
 
-        System.out.println("hello from get all users");
         return ResponseEntity.ok()
             // .headers(headers)
             .body(userService.getAllUsers());

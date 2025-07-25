@@ -32,6 +32,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<UserDTO> findByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::convertToDTO);
+    }
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+    
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+    
+    @Override
     public UserDTO saveUser(UserDTO userDTO){
         MyUser user = convertToEntity(userDTO);
         MyUser savedUser = userRepository.save(user);
