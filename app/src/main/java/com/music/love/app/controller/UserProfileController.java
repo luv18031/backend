@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.music.love.app.dto.UserDTO;
-import com.music.love.app.dto.UserProfileRequestDto;
 import com.music.love.app.service.UserService;
 
 
@@ -38,12 +38,13 @@ public class UserProfileController {
     }
     
     @GetMapping
-    public ResponseEntity<UserDTO> getUserProfile(@RequestBody final UserProfileRequestDto userProfileRequestDto) {
+    public ResponseEntity<UserDTO> getUserProfile(@RequestParam final String username) {
         // Placeholder for user profile retrieval logic
+        System.out.println("authenticated user: " + SecurityContextHolder.getContext().getAuthentication().getName());
         if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        Optional<UserDTO> userResp = userService.findByUsername(userProfileRequestDto.username());
+        Optional<UserDTO> userResp = userService.findByUsername(username);
         if(userResp == null) {
             return ResponseEntity.notFound().build();
         }
