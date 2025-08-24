@@ -53,7 +53,7 @@ public class UserProfileController {
     }
 
     @PatchMapping
-    public ResponseEntity<UserDTO> saveUserProfile(@RequestParam final String username) {
+    public ResponseEntity<UserDTO> saveUserProfile(@RequestParam final String username, @RequestBody final UserDTO userDTO ) {
         
         if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -62,11 +62,10 @@ public class UserProfileController {
         if(userResp == null) {
             return ResponseEntity.notFound().build();
         }
-        UserDTO user = userResp.get();
 
-        userService.saveUser(user);
+        userService.updateUser(userResp.get().id(), userDTO);
         
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userDTO);
     }
     
 }
