@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.music.love.app.dto.UserDTO;
+import com.music.love.app.entity.MyUser;
 import com.music.love.app.service.UserService;
 
 
@@ -42,13 +43,17 @@ public class UserController {
 
         return ResponseEntity.ok()
             // .headers(headers)
-            .body(userService.getAllUsers());
+            .body(
+                userService.getAllUsers().stream()
+                    .map(this::convertToDTO)
+                    .toList()
+            );
         // return ResponseEntity.ok().headers(headers).body(userService.getAllUsers() );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        Optional<UserDTO> user = userService.getUserById(id);
+        Optional<UserDTO> user = userService.getUserById(id).map(this::convertToDTO);
 
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 
@@ -56,15 +61,14 @@ public class UserController {
 
     @PostMapping
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        System.out.println("hello from create user");
-        return userService.saveUser(userDTO);
+        return this.convertToDTO(userService.saveUser(this.convertToEntity(userDTO)));    
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         try {
-            UserDTO updatedUser = userService.updateUser(id, userDTO);
-            return ResponseEntity.ok().body(updatedUser);
+            MyUser updatedUser = userService.updateUser(id, this.convertToEntity(userDTO));
+            return ResponseEntity.ok().body(this.convertToDTO(updatedUser));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -77,6 +81,29 @@ public class UserController {
     }
     
     
-    
+    private UserDTO convertToDTO(MyUser user){
+        return new UserDTO(user.getId(),user.getUsername(),user.getEmail(), 
+            user.getRegister_as(), user.getPhoneNumber(), user.getCountry(), 
+            user.getCity(), user.getAddress(), user.getState(), user.getPinCode(),
+            user.getProfilePicture(), user.getGovernmentPictureId());
+    }
+
+    private MyUser convertToEntity(UserDTO userDTO){
+        MyUser user = new MyUser();
+        user.setId(userDTO.id());
+        user.setEmail(userDTO.email());
+        user.setUsername(userDTO.username());
+        user.setAddress(userDTO.address());
+        user.setCity(userDTO.city());
+        user.setState(userDTO.state());
+        user.setCountry(userDTO.country());
+        user.setPinCode(userDTO.pinCode());
+        user.setPhoneNumber(userDTO.phoneNumber());
+        user.setRegister_as(userDTO.register_as());
+        user.setProfilePicture(userDTO.profilePicture());
+        user.setGovernmentPictureId(userDTO.governmentPictureId());
+
+        return user;
+    }
     
 }
