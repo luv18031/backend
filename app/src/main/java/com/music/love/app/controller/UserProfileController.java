@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.music.love.app.dto.UserDTO;
+import com.music.love.app.entity.MyUser;
 import com.music.love.app.service.UserService;
 
 
@@ -44,12 +45,11 @@ public class UserProfileController {
         if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        Optional<UserDTO> userResp = userService.findByUsername(username);
+        Optional<MyUser> userResp = userService.findByUsername(username);
         if(userResp == null) {
             return ResponseEntity.notFound().build();
         }
-        UserDTO user = userResp.get();
-        return ResponseEntity.ok(user);
+        return  ResponseEntity.ok().body(this.convertToDTO(userResp.get()));
     }
 
     @PatchMapping
@@ -58,14 +58,69 @@ public class UserProfileController {
         if(!SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        Optional<UserDTO> userResp = userService.findByUsername(username);
+        Optional<MyUser> userResp = userService.findByUsername(username);
         if(userResp == null) {
             return ResponseEntity.notFound().build();
         }
 
-        userService.updateUser(userResp.get().id(), userDTO);
+        MyUser existingUser = userResp.get();
+        if(!existingUser.getUsername().equals(userDTO.username()) && userService.existsByUsername(userDTO.username())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        if(!existingUser.getEmail().equals(userDTO.email()) && userService.existsByEmail(userDTO.email())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        if(!existingUser.getAddress().equals(userDTO.address())) {
+            existingUser.setAddress(userDTO.address());
+        }
+        if(!existingUser.getCity().equals(userDTO.city())) {
+            existingUser.setCity(userDTO.city());
+        }
+        if(!existingUser.getState().equals(userDTO.state())) {
+            existingUser.setState(userDTO.state());
+        }
+        if(!existingUser.getCountry().equals(userDTO.country())) {
+            existingUser.setCountry(userDTO.country());
+        }
+        if(!existingUser.getPinCode().equals(userDTO.pinCode())) {
+            existingUser.setPinCode(userDTO.pinCode());
+        }
+        if(!existingUser.getPhoneNumber().equals(userDTO.phoneNumber())) {
+            existingUser.setPhoneNumber(userDTO.phoneNumber());
+        }
+        if(!existingUser.getRegister_as().equals(userDTO.register_as())) {
+            existingUser.setRegister_as(userDTO.register_as());
+        }
+        existingUser.setProfilePicture(userDTO.profilePicture());
+        existingUser.setGovernmentPictureId(userDTO.governmentPictureId());
         
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok().body(this.convertToDTO(userService.updateUser(userResp.get().getId(), existingUser)));
     }
     
+    private UserDTO convertToDTO(MyUser user){
+        return new UserDTO(user.getId(),user.getUsername(),user.getEmail(), 
+            user.getRegister_as(), user.getPhoneNumber(), user.getCountry(), 
+            user.getCity(), user.getAddress(), user.getState(), user.getPinCode(),
+            user.getProfilePicture(), user.getGovernmentPictureId());
+    }
+
+    private MyUser convertToEntity(UserDTO userDTO){
+        MyUser user = new MyUser();
+        user.setId(userDTO.id());
+        user.setEmail(userDTO.email());
+        user.setUsername(userDTO.username());
+        user.setAddress(userDTO.address());
+        user.setCity(userDTO.city());
+        user.setState(userDTO.state());
+        user.setCountry(userDTO.country());
+        user.setPinCode(userDTO.pinCode());
+        user.setPhoneNumber(userDTO.phoneNumber());
+        user.setRegister_as(userDTO.register_as());
+        user.setProfilePicture(userDTO.profilePicture());
+        user.setGovernmentPictureId(userDTO.governmentPictureId());
+
+        return user;
+    }
 }

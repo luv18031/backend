@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.music.love.app.dto.UserDTO;
+import com.music.love.app.entity.MyUser;
 
 public interface UserService {
 
-    List<UserDTO> getAllUsers();
-    Optional<UserDTO> getUserById(Long id);
-    UserDTO saveUser(UserDTO userDTO);
-    UserDTO updateUser(Long id, UserDTO userDTO);
+    List<MyUser> getAllUsers();
+    Optional<MyUser> getUserById(Long id);
+    MyUser saveUser(MyUser user);
+    MyUser updateUser(Long id, MyUser user);
     void deleteUser(Long id);
-    Optional<UserDTO> findByUsername(String username);
+    Optional<MyUser> findByUsername(String username);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     

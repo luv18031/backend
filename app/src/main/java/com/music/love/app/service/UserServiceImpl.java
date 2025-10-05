@@ -21,20 +21,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers(){
-        return userRepository.findAll().stream()
-                .map(this:: convertToDTO)
-                .collect(Collectors.toList());
+    public List<MyUser> getAllUsers(){
+        return userRepository.findAll();
     }
 
     @Override
-    public Optional<UserDTO> getUserById(Long id){
-        return userRepository.findById(id).map(this::convertToDTO);
+    public Optional<MyUser> getUserById(Long id){
+        return userRepository.findById(id);
     }
 
     @Override
-    public Optional<UserDTO> findByUsername(String username) {
-        return userRepository.findByUsername(username).map(this::convertToDTO);
+    public Optional<MyUser> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
     @Override
     public boolean existsByUsername(String username) {
@@ -47,30 +45,14 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UserDTO saveUser(UserDTO userDTO){
-        MyUser user = convertToEntity(userDTO);
-        MyUser savedUser = userRepository.save(user);
-        return convertToDTO(savedUser);
+    public MyUser saveUser(MyUser user){
+        return userRepository.save(user);
     }
 
     @Override
-    public UserDTO updateUser(Long id,UserDTO userDTO){
-        MyUser user = userRepository.findById(id).orElseThrow();
-        user.setUsername(userDTO.username());
-        user.setEmail(userDTO.email());
-        user.setAddress(userDTO.address());
-        user.setCity(userDTO.city());
-        user.setState(userDTO.state());
-        user.setCountry(userDTO.country());
-        user.setPinCode(userDTO.pinCode());
-        user.setPhoneNumber(userDTO.phoneNumber());
-        user.setRegister_as(userDTO.register_as());
-        user.setProfilePicture(userDTO.profilePicture());
-        user.setGovernmentPictureId(userDTO.governmentPictureId());
+    public MyUser updateUser(Long id,MyUser user){
         user.setUpdatedAt(Instant.now());
-        MyUser updatedUser = userRepository.save(user);
-
-        return convertToDTO(updatedUser);
+        return userRepository.save(user);
     }
 
     @Override
